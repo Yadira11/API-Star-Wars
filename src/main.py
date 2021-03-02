@@ -33,6 +33,32 @@ def sitemap():
 @app.route('/user', methods=['GET'])
 def handle_hello():
 
+    query = User.query.all()
+    results = list(map(lambda x: x.serialize(), query))
+
+    return jsonify(results), 200
+@app.route('/user/<int:id>', methods=['GET'])
+def getUser():
+
+    user = User.query.get(id)
+    if usuario is None:
+        raise APIException('Usuario not found', status_code=404)
+    results = user.serialize()
+
+    return jsonify(results), 200
+
+@app.route('/Personaje', methods=['GET'])
+def personaje_todos():
+    query = Personaje.query.all()
+    results = list(map(lambda x: x.serialize(), query))
+    return jsonify(results),200
+
+@app.route('/planetas', methods=['GET'])
+def planetas_todos():
+    query = Planetas.query.all()
+    results = list(map(lambda x: x.serialize2(),query))
+    return jsonify(results),200
+
     response_body = {
         "msg": "Hello, this is your GET /user response "
     }
