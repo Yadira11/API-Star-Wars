@@ -52,12 +52,62 @@ def personaje_todos():
     query = Personaje.query.all()
     results = list(map(lambda x: x.serialize(), query))
     return jsonify(results),200
+@app.route ("/personajes/<int:personaje_id>" , methods=["GET"])
+def personaje_unico(id):
+    personajes = character.query.get(planeta_id)
+    if personajes is None:
+        raise APIException("Personaje is not found", status_code=404)
+    results = personajes.serialize()
+    return jsonify(result), 200
+@app.route("/Personas", methods=["POST"])
+def add_personas():
+    request_body = request.get_json()
+    print(request_body)
+    add_personas= personas(name=request_body["name"], height=request_body["height"], gender=request_body["gender"], hair_color=request_body["hair_color"], eye_color=request_body["eye_color"] )
+    db.session.add(add_personas)
+    db.session.commit()
+
 
 @app.route('/planetas', methods=['GET'])
 def planetas_todos():
     query = Planetas.query.all()
     results = list(map(lambda x: x.serialize(),query))
     return jsonify(results),200
+@app.route ("/planetas/<int:planeta_id>" , methods=["GET"])
+def planeta_unico(planeta_id):
+    planetas = character.query.get(planeta_id)
+    if planetas is None:
+        raise APIException("Planeta is not found", status_code=404)
+    results = planetas.serialize()
+    return jsonify(result), 200
+
+@app.route("/add_planetas", methods=["POST"])
+def add_planeta():
+    request_body = request.get_json()
+    print(request_body)
+    add_planetas= planetas(name=request_body["name"], diameter=request_body["diameter"] , rotation_period= request_body["rotation_period"] , gravity=request_body["gravity"], population=request_body["population"], climate=request_body["climate"] )
+    db.session.add(add_planetas)
+    db.session.commit()
+
+@app.route('/favoritos', methods=['GET'])
+def favoritos_todos():
+    query = favoritos.query.all()
+
+@app.route ("/favoritos/<int:favorito_id>" , methods=["GET"])
+def favorito_unico(favorito_id):
+    favoritos = favoritos.query.get(favorito_id)
+    if favoritos is None:
+        raise APIException("Favoritos is not found", status_code=404)
+    results = favoritos.serialize()
+    return jsonify(result), 200
+@app.route("/add_Favoritos" , methods=["POST"])
+def add_favorito():
+    request_body = request.get_json()
+    print(request_body)
+    favorito= Favoritos(name=request_body["id"])
+    db.session.add(favorito)
+    db.session.commit()
+    return jsonify("Good Job",200)
 
     response_body = {
         "msg": "Hello, this is your GET /user response "
