@@ -91,7 +91,9 @@ def add_planeta():
 
 @app.route('/favoritos', methods=['GET'])
 def favoritos_todos():
-    query = favoritos.query.all()
+    query = Favoritos.query.all()
+    results = list(map(lambda x: x.serialize(),query))
+    return jsonify(results),200
 
 @app.route ("/favoritos/<int:favorito_id>" , methods=["GET"])
 def favorito_unico(favorito_id):
@@ -100,15 +102,42 @@ def favorito_unico(favorito_id):
         raise APIException("Favoritos is not found", status_code=404)
     results = favoritos.serialize()
     return jsonify(result), 200
+
+"""
+COMO MANDAR UN ADD FAVORITO
+{
+    "personajes_name" :"Luke Skywalker",
+    "planetas_name" :null,
+    "user_name": "Yadira Chavarria"
+
+}
+O
+{
+    "personajes_name" :null,
+    "planetas_name" :"Tatooine",
+    "user_name": "Yadira Chavarria"
+
+}
+"""
 @app.route("/add_Favoritos" , methods=["POST"])
 def add_favorito():
     request_body = request.get_json()
     print(request_body)
-    favorito= Favoritos(name=request_body["id"])
+    favorito= Favoritos(user_name=request_body["user_name"], planetas_name=request_body["planetas_name"], personajes_name=request_body["personajes_name"])
     db.session.add(favorito)
     db.session.commit()
     return jsonify("Good Job",200)
 
+
+@app.route("/del_Favoritos/<int:fid>", methods=["DELETE"])
+def del_Favoritos():
+    favorito = Favoritos.query.get()
+    if favorito is None:
+        raise APIException('Favorito no encontrado', status_code=404)
+        db.session.delete(favoritos)
+        db.session.commit()
+
+        return jsonify("Good,Good"),200
     response_body = {
         "msg": "Hello, this is your GET /user response "
     }

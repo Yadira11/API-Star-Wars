@@ -11,7 +11,7 @@ class User(db.Model):
     password = db.Column(db.String(80), unique=False, nullable=False)
     name = db.Column(db.String(250), nullable=False, unique=True)
     gender = db.Column(db.String(250), nullable=False)
-    rel = relationship('Favoritos')
+    rel = db.relationship('Favoritos')
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -80,9 +80,9 @@ class Planetas(db.Model) :
 class Favoritos(db.Model):
     _tablename_= 'favoritos'
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    personajes_name =db.Column(db.String(250),ForeignKey('personaje.name'))
-    planetas_name = db.Column(db.String(250),ForeignKey('planetas.name'))
-    user_name = db.Column(db.String(250),ForeignKey('user.name'))
+    personajes_name =db.Column(db.String(250),db.ForeignKey('personaje.name'))
+    planetas_name = db.Column(db.String(250),db.ForeignKey('planetas.name'))
+    user_name = db.Column(db.String(250),db.ForeignKey('user.name'))
     
     
     def _repr_(self):
@@ -91,7 +91,7 @@ class Favoritos(db.Model):
     def serialize(self):
         return{
             "id": self.id,
-            "Personaje_name" : self.Personaje_name,
+            "personajes_name" : self.personajes_name,
             "planetas_name": self.planetas_name,
             "user_name" : self.user_name
         }
